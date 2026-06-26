@@ -175,7 +175,7 @@ function RVBullsEye({pitch,roll,threshold,isLevel,draggable,onDrag,onDragEnd}){
     const dx=clientX-cx, dy=clientY-cy;
     const halfPx=rect.width/2;
     // map pixel offset to degrees, clamped to MAX_DEG
-    const r=clamp(-dx/halfPx*MAXD,-MAXD,MAXD);
+    const r=clamp(dx/halfPx*MAXD,-MAXD,MAXD);  // drag right = right side high = positive roll
     const p=clamp( dy/halfPx*MAXD,-MAXD,MAXD);
     return{p:+(p.toFixed(2)),r:+(r.toFixed(2))};
   }
@@ -206,7 +206,7 @@ function RVBullsEye({pitch,roll,threshold,isLevel,draggable,onDrag,onDragEnd}){
     window.addEventListener('touchend',onPointerUp);
     return()=>{window.removeEventListener('mouseup',onPointerUp);window.removeEventListener('touchend',onPointerUp);};
   },[draggable]);
-  const bx=clamp(-roll/MAXD,-1,1)*(R*0.62);
+  const bx=clamp(roll/MAXD,-1,1)*(R*0.62);  // +roll = right side high = bubble moves right (operator perspective)
   const by=clamp(pitch/MAXD,-1,1)*(R*0.62);
   const lzR=(threshold/MAXD)*(R*0.62);
   const bCol=isLevel?'#34d399':(Math.abs(pitch)<=threshold*2&&Math.abs(roll)<=threshold*2)?'#facc15':'#f87171';
@@ -400,7 +400,7 @@ function App(){
             ),
             h('div',null,
               h('h1',{style:{fontSize:'14px',fontWeight:700,color:'white',margin:0,lineHeight:1}},'Digital Level 1 RV'),
-              h('p',{style:{fontSize:'10px',color:'#475569',margin:0,marginTop:'2px',lineHeight:1}},'MPU-6050 \u00B7 ESP32 \u00B7 BLE \u00B7 v1.3')
+              h('p',{style:{fontSize:'10px',color:'#475569',margin:0,marginTop:'2px',lineHeight:1}},'MPU-6050 \u00B7 ESP32 \u00B7 BLE \u00B7 v1.4')
             )
           ),
           h('div',{style:{display:'flex',alignItems:'center',gap:'5px',padding:'4px 10px',borderRadius:'20px',border:`1px solid ${sc}40`,background:`${sc}12`,fontSize:'11px',fontWeight:500,color:sc}},
@@ -496,7 +496,7 @@ function App(){
         // Footer
         h('div',{style:{textAlign:'center',fontSize:'11px',color:'#1e3a5f',paddingTop:'4px'}},
           h('p',{style:{margin:0}},'Arduino Nano ESP32 + MPU-6050 \u00B7 BLE Nordic UART'),
-          h('p',{style:{margin:'3px 0 0'}},'Level tolerance \u00B1'+THR.toFixed(1)+'\u00B0 \u00B7 \u00A9 Digital Level 1 RV \u00B7 v1.3')
+          h('p',{style:{margin:'3px 0 0'}},'Level tolerance \u00B1'+THR.toFixed(1)+'\u00B0 \u00B7 \u00A9 Digital Level 1 RV \u00B7 v1.4')
         )
       )
     ),
